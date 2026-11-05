@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b101c" />
+    <meta name="description" content="Temple of Bahamut: thirteen interactive 3D rooms for one Dungeon Master, including the Library of the Last Wyrm." />
+    <title>Temple of Bahamut — DM Encounter Maps</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="viewport" aria-label="Interactive 3D magical library encounter map"></div>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <div class="hud">
+      <header class="topbar glass" id="topbar">
+        <div class="brand-mark" aria-hidden="true">✦</div>
+        <div class="brand-block"><h1>The Library of the Last Wyrm</h1></div>
+        <div class="topbar-right">
+          <div class="live-chip"><span class="pulse"></span><span>LIVE SCENE</span></div>
+          <span class="mini-metric"><strong id="book-count">1,000</strong> flying books</span>
+          <button class="icon-button" id="help-button" aria-label="Show instructions" title="Instructions">?</button>
+          <button class="icon-button hide-icon" id="hide-topbar" aria-label="Hide title bar" title="Hide title bar">−</button>
+        </div>
+      </header>
+      <button id="show-topbar" class="show-title glass" hidden aria-label="Show title bar">✦ Show title</button>
+
+      <aside class="panel party-panel glass" aria-labelledby="party-title">
+        <div class="panel-kicker">01 / THE ADVENTURERS</div>
+        <h2 id="party-title">The Party <span class="subtle">/ 4</span></h2>
+        <p class="panel-intro">Click SPAWN on an unspawned hero, place them on a free tile, then move up to six squares.</p>
+        <div id="party-list" class="party-list"></div>
+        <div class="panel-foot">
+          <span id="move-status">Select a miniature to move</span>
+          <div class="party-actions"><button class="text-button" id="unspawn-hero" disabled>Remove hero</button><button class="text-button" id="reset-party">Unspawn all ↺</button></div>
+        </div>
+      </aside>
+
+      <aside class="panel encounter-panel glass" aria-labelledby="encounter-title">
+        <div class="panel-kicker">02 / GAME MASTER TOOLS</div>
+        <h2 id="encounter-title">The Encounter</h2>
+        <p class="panel-intro">Choose a creature, then click an empty grid square to spawn it. Enemies move just like heroes.</p>
+        <div class="section-label">SUMMON A PIECE <span>CLICK TO PLACE</span></div>
+        <div id="spawn-list" class="spawn-list"></div>
+        <button id="cancel-spawn" class="text-button cancel-spawn" hidden>Cancel placement ×</button>
+        <div class="section-label">ACTIVE ENEMIES <span id="enemy-count">0</span></div>
+        <div id="enemy-list" class="enemy-list"></div>
+        <div class="enemy-actions">
+          <button id="remove-enemy" class="text-button" disabled>Remove selected</button>
+          <button id="clear-enemies" class="text-button">Clear all</button>
+        </div>
+        <div class="section-label">NARRATIVE CUES <span>DISPLAY TO PLAYERS</span></div>
+        <div class="feedback-controls">
+          <button id="feedback-success" class="feedback-button success-button">✦ SUCCESS</button>
+          <button id="feedback-fail" class="feedback-button failure-button">✕ FAILURE</button>
+        </div>
+      </aside>
+
+      <div class="bottom-left glass"><span class="gold-dot"></span><span id="scene-status">BAHAMUT WATCHES IN SILENCE</span></div>
+      <nav class="toolbar glass" aria-label="Camera and scene controls">
+        <button class="tool-button active" id="view-orbit" title="Cinematic camera">◉ <span>Explore</span></button>
+        <button class="tool-button" id="view-board" title="Overhead map showing the bridge and platform">▦ <span>Battle map</span></button>
+        <div class="toolbar-separator"></div>
+        <button class="tool-button" id="toggle-books" title="Pause floating books">✧ <span>Pause books</span></button>
+        <button class="tool-button" id="reset-camera" title="Reset camera">⟲ <span>Reset view</span></button>
+      </nav>
+      <div class="bottom-hint">DRAG TO ORBIT · SCROLL TO ZOOM · CLICK MINIATURE, THEN TILE · KEYS 1–4 SELECT HEROES</div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div id="result-flash" class="result-flash" role="status" aria-live="assertive" hidden>
+      <div class="result-runes" aria-hidden="true">✦ ✧ ✦</div>
+      <div id="result-word" class="result-word">SUCCESS</div>
+      <div class="result-subtext">THE ARCHIVE HAS SPOKEN</div>
+      <span class="result-dismiss">CLICK ANYWHERE TO DISMISS</span>
+    </div>
+
+    <div class="modal-backdrop" id="help-modal" hidden>
+      <div class="modal glass" role="dialog" aria-modal="true" aria-labelledby="help-title">
+        <button class="modal-close" id="close-help" aria-label="Close instructions">×</button>
+        <div class="panel-kicker">A GUIDE FOR THE GAME MASTER</div>
+        <h2 id="help-title">Welcome to the Archive</h2>
+        <p><strong>Explore:</strong> drag to rotate the camera, scroll to zoom, and right-drag to pan. Use Battle map to see the long entrance bridge and central platform from above.</p>
+        <p><strong>Spawn your party:</strong> heroes begin unspawned. Click a hero on the left, then click a free tile to place them. Select their miniature or party row and move up to six orthogonal tiles. Remove one hero or unspawn all from the party panel.</p>
+        <p><strong>Spawn enemies:</strong> click Spawn next to a creature, then click a free square on either the bridge or main platform. Click the enemy to move it or select Remove selected to delete it. You can summon multiple copies.</p>
+        <p><strong>Narrate:</strong> the four podiums are purely visual. Use Success and Failure to flash a large message to the table when you decide an outcome. There is no built-in puzzle.</p>
+        <p><strong>Display:</strong> hide the header using − and restore it with Show title. Keys 1–4 select or spawn heroes; Escape cancels placement. This is one shared DM-controlled screen, not live multiplayer.</p>
+        <button class="primary-button" id="start-exploring">Enter the Library →</button>
+      </div>
+    </div>
+    <script type="module" src="./src/entry.js"></script>
+  </body>
+</html>
